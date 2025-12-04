@@ -4,43 +4,49 @@
 <meta charset="UTF-8">
 <title>停止連絡フォーム</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
     body {
-        background: #e9f4e9;
+        background: #fafafa;
         font-family: "Yu Gothic", sans-serif;
         margin: 0;
-        padding: 0;
+        padding: 40px 0;
     }
     .container {
-        max-width: 700px;
-        background: #f8fff8;
-        margin: 30px auto;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px #c8d9c8;
+        max-width: 800px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     h1 {
-        color: #2f6531;
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 20px;
     }
     label {
+        font-size: 16px;
         font-weight: bold;
         display: block;
-        margin-top: 20px;
+        margin-top: 25px;
+        color: #444;
     }
-    input, textarea {
+    input {
         width: 100%;
         padding: 12px;
         margin-top: 8px;
         border-radius: 5px;
-        border: 1px solid #ccc;
-        font-size: 14px;
+        border: 1px solid #ddd;
+        background: #f5f5f5;
+        font-size: 15px;
     }
     button {
-        margin-top: 30px;
-        padding: 14px 20px;
-        background: #2f7d31;
+        margin-top: 35px;
+        padding: 14px 25px;
+        font-size: 17px;
+        background: #2d7cdb;
         color: white;
-        font-size: 16px;
         border: none;
         border-radius: 6px;
         cursor: pointer;
@@ -48,31 +54,42 @@
     button:hover {
         opacity: 0.9;
     }
+    #result {
+        font-weight: bold;
+        margin-top: 20px;
+    }
 </style>
+
 </head>
 <body>
 
 <div class="container">
     <h1>停止連絡</h1>
-    <p>このフォームを送信する際に、お客様がご自身のお名前やメールアドレスなどの情報を入力しない限り、自動で取得されることはありません。</p>
 
     <form id="stopForm">
+
         <label>1. 宛先メールアドレス *</label>
-        <input type="email" name="to_email" autocomplete="email" required>
+        <input type="email" name="to_email" placeholder="メールを入力してください" autocomplete="email" required>
 
         <label>2. 送信元メールアドレス *</label>
-        <input type="email" name="from_email" autocomplete="email" required>
+        <input type="email" name="from_email" placeholder="メールを入力してください" autocomplete="email" required>
 
         <label>3. 送信者名（会社名　お名前） *</label>
-        <input type="text" name="sender" autocomplete="name" required>
+        <input type="text" name="sender" placeholder="100 文字以内で入力してください" autocomplete="name" required>
 
-        <label>4. 停止期間 *</label>
-        <input type="text" name="period" autocomplete="organization-title" required>
+        <label>4. プラント名 *</label>
+        <input type="text" name="plant" placeholder="100 文字以内で入力してください" autocomplete="organization" required>
+
+        <label>5. 系統コード *</label>
+        <input type="text" name="system_code" placeholder="20 文字以内で入力してください" autocomplete="off" required>
+
+        <label>6. 停止期間 *</label>
+        <input type="text" name="period" placeholder="100 文字以内で入力してください" autocomplete="off" required>
 
         <button type="submit">送信</button>
     </form>
 
-    <p id="result" style="margin-top:20px; font-weight:bold;"></p>
+    <p id="result"></p>
 </div>
 
 <script>
@@ -83,15 +100,17 @@ document.getElementById("stopForm").addEventListener("submit", async function(e)
         to_email: this.to_email.value,
         from_email: this.from_email.value,
         sender: this.sender.value,
+        plant: this.plant.value,
+        system_code: this.system_code.value,
         period: this.period.value
     };
 
-    const FLOW_URL = "https://default95da0c5bd9104a54a5b149f35f19f3.b0.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c2e89755d94145578885e1256d8a0e9a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=7HM_XYfiTKNK_kuyI17EziUmUZME8ic3mtlsscAz3XY";  // ← Power Automate の URL を設定
+    const FLOW_URL = "https://default95da0c5bd9104a54a5b149f35f19f3.b0.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c2e89755d94145578885e1256d8a0e9a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=7HM_XYfiTKNK_kuyI17EziUmUZME8ic3mtlsscAz3XY";
 
     try {
         const res = await fetch(FLOW_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data)
         });
 
@@ -101,6 +120,7 @@ document.getElementById("stopForm").addEventListener("submit", async function(e)
         } else {
             document.getElementById("result").textContent = "エラーが発生しました（送信失敗）";
         }
+
     } catch (err) {
         document.getElementById("result").textContent = "通信エラー：送信できませんでした";
     }
@@ -109,4 +129,3 @@ document.getElementById("stopForm").addEventListener("submit", async function(e)
 
 </body>
 </html>
-
