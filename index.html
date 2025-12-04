@@ -58,10 +58,28 @@
         font-weight: bold;
         margin-top: 20px;
     }
+
+    /* ← 追加：右上に Ver0.1 を表示する */
+    .version {
+        position: fixed;
+        top: 10px;
+        right: 15px;
+        font-size: 14px;
+        color: #666;
+        background: rgba(255,255,255,0.8);
+        padding: 4px 10px;
+        border-radius: 6px;
+        box-shadow: 0 0 4px rgba(0,0,0,0.1);
+        z-index: 999;
+    }
+
 </style>
 
 </head>
 <body>
+
+<!-- 右上の Ver 表示 -->
+<div class="version">Ver0.1</div>
 
 <div class="container">
     <h1>停止連絡</h1>
@@ -117,7 +135,6 @@ document.getElementById("stopForm").addEventListener("submit", async function(e)
         period: this.period.value
     };
 
-    // ← あなたの Power Automate の Webhook URL（そのまま使用OK）
     const FLOW_URL = "https://default95da0c5bd9104a54a5b149f35f19f3.b0.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c2e89755d94145578885e1256d8a0e9a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=7HM_XYfiTKNK_kuyI17EziUmUZME8ic3mtlsscAz3XY";
 
     try {
