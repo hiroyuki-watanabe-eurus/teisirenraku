@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>停止連絡フォーム</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        background: #e9f4e9;
+        font-family: "Yu Gothic", sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 700px;
+        background: #f8fff8;
+        margin: 30px auto;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #c8d9c8;
+    }
+    h1 {
+        color: #2f6531;
+    }
+    label {
+        font-weight: bold;
+        display: block;
+        margin-top: 20px;
+    }
+    input, textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+    button {
+        margin-top: 30px;
+        padding: 14px 20px;
+        background: #2f7d31;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    button:hover {
+        opacity: 0.9;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>停止連絡</h1>
+    <p>このフォームを送信する際に、お客様がご自身のお名前やメールアドレスなどの情報を入力しない限り、自動で取得されることはありません。</p>
+
+    <form id="stopForm">
+        <label>1. 宛先メールアドレス *</label>
+        <input type="email" name="to_email" autocomplete="email" required>
+
+        <label>2. 送信元メールアドレス *</label>
+        <input type="email" name="from_email" autocomplete="email" required>
+
+        <label>3. 送信者名（会社名　お名前） *</label>
+        <input type="text" name="sender" autocomplete="name" required>
+
+        <label>4. 停止期間 *</label>
+        <input type="text" name="period" autocomplete="organization-title" required>
+
+        <button type="submit">送信</button>
+    </form>
+
+    <p id="result" style="margin-top:20px; font-weight:bold;"></p>
+</div>
+
+<script>
+document.getElementById("stopForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const data = {
+        to_email: this.to_email.value,
+        from_email: this.from_email.value,
+        sender: this.sender.value,
+        period: this.period.value
+    };
+
+    const FLOW_URL = "YOUR_FLOW_URL_HERE";  // ← Power Automate の URL を設定
+
+    try {
+        const res = await fetch(FLOW_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+            document.getElementById("result").textContent = "送信しました！";
+            this.reset();
+        } else {
+            document.getElementById("result").textContent = "エラーが発生しました（送信失敗）";
+        }
+    } catch (err) {
+        document.getElementById("result").textContent = "通信エラー：送信できませんでした";
+    }
+});
+</script>
+
+</body>
+</html>
