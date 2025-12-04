@@ -69,22 +69,34 @@
     <form id="stopForm">
 
         <label>1. 宛先メールアドレス *</label>
-        <input type="email" name="to_email" placeholder="メールを入力してください" autocomplete="email" required>
+        <input type="email" name="to_email"
+               placeholder="メールを入力してください"
+               autocomplete="email" required>
 
         <label>2. 送信元メールアドレス *</label>
-        <input type="email" name="from_email" placeholder="メールを入力してください" autocomplete="email" required>
+        <input type="email" name="from_email"
+               placeholder="メールを入力してください"
+               autocomplete="email" required>
 
         <label>3. 送信者名（会社名　お名前） *</label>
-        <input type="text" name="sender" placeholder="100 文字以内で入力してください" autocomplete="name" required>
+        <input type="text" name="sender"
+               placeholder="100 文字以内で入力してください"
+               autocomplete="name" required>
 
         <label>4. プラント名 *</label>
-        <input type="text" name="plant" placeholder="100 文字以内で入力してください" autocomplete="organization" required>
+        <input type="text" name="plant"
+               placeholder="100 文字以内で入力してください"
+               autocomplete="organization" required>
 
         <label>5. 系統コード *</label>
-        <input type="text" name="system_code" placeholder="20 文字以内で入力してください" autocomplete="off" required>
+        <input type="text" name="system_code"
+               placeholder="20 文字以内で入力してください"
+               autocomplete="off" required>
 
         <label>6. 停止期間 *</label>
-        <input type="text" name="period" placeholder="100 文字以内で入力してください" autocomplete="off" required>
+        <input type="text" name="period"
+               placeholder="100 文字以内で入力してください"
+               autocomplete="off" required>
 
         <button type="submit">送信</button>
     </form>
@@ -105,6 +117,7 @@ document.getElementById("stopForm").addEventListener("submit", async function(e)
         period: this.period.value
     };
 
+    // ← あなたの Power Automate の Webhook URL（そのまま使用OK）
     const FLOW_URL = "https://default95da0c5bd9104a54a5b149f35f19f3.b0.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/c2e89755d94145578885e1256d8a0e9a/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=7HM_XYfiTKNK_kuyI17EziUmUZME8ic3mtlsscAz3XY";
 
     try {
